@@ -4,9 +4,7 @@ library(readxl)
 library(sf)
 library(ggsn)
 library(raster)
-remotes::install_github("Pakillo/grateful")
 library(grateful)
-library(Cairo)
 (.packages())
 search()
 objects(2) #el 1 siempre es para el global environment
@@ -19,13 +17,14 @@ dir()
 causes <- read_excel("oxfam_long.xlsx")
 head(causes)
 
-#Plot
+#Plot causes
 causes %>% 
   ggplot(aes(x=Year, y=Spills, fill=Cause)) +
   geom_line(aes(linetype=Cause)) + #line type
-  ggtitle("Oil Spills in the ONP by cause, 2000-2019") +
+  ggtitle("Oil Spills by cause, 2000-2019") +
   scale_x_continuous(limits=c(2000, 2019), breaks = seq(2000, 2019, 2))+
   theme(plot.title = element_text(size = 12, face = "bold"),
         legend.position = "bottom") +
-  labs(y = "Number of oil spills")  +
-  stat_summary(fun = sum, na.rm = TRUE, group = 3, color = 'black', geom ='line')
+  labs(y = "Number of oil spills") 
+
+causes %>% group_by(Year) %>% summarize(Cause)
